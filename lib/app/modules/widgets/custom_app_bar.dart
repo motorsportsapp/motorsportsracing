@@ -83,8 +83,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   spacing: 4,
                   children: [
                     Container(
-                      width: 16,
-                      height: 16,
+                      width: 18,
+                      height: 18,
                       decoration: ShapeDecoration(
                         shape: RoundedRectangleBorder(
                           side: BorderSide(width: 3, color: Colors.white),
