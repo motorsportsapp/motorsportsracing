@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:motor_sport_easy/app/routes/app_pages.dart';
 import '../controllers/request_admin_controller.dart';
 
 class RequestAdminView extends GetView<RequestAdminController> {
@@ -52,9 +53,19 @@ class RequestAdminView extends GetView<RequestAdminController> {
                 pinned: true,
                 snap: false,
                 backgroundColor: const Color(0xFFDC2626),
+                automaticallyImplyLeading: false,
+                leading: IconButton(onPressed: (){
+                  Get.toNamed(Routes.RACE_ADMIN);
+                }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
                 flexibleSpace: const FlexibleSpaceBar(
                   title:Text('Race Requests',style: TextStyle(color: Colors.white),),
                 ),
+                actions: [
+                  IconButton(
+                    icon: const Icon(Icons.refresh, color: Colors.white),
+                    onPressed: controller.fetchRaceRequests,
+                  ),
+                ],
               ),
               buildSliverList(),
             ],
@@ -83,6 +94,16 @@ class RequestAdminView extends GetView<RequestAdminController> {
                     flexibleSpace: const FlexibleSpaceBar(
                       title: Text('Race Requests',style: TextStyle(color: Colors.white),),
                     ),
+                    automaticallyImplyLeading: false,
+                    leading: IconButton(onPressed: (){
+                      Get.toNamed(Routes.RACE_ADMIN);
+                    }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
+                    actions: [
+                      IconButton(
+                        icon: const Icon(Icons.refresh, color: Colors.white),
+                        onPressed: controller.fetchRaceRequests,
+                      ),
+                    ],
                   ),
                   buildSliverList(),
                 ],

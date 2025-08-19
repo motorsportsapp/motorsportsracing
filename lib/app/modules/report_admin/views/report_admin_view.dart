@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import '../../../routes/app_pages.dart';
 import '../controllers/report_admin_controller.dart';
 
 class ReportAdminView extends GetView<ReportAdminController> {
@@ -54,6 +55,10 @@ class ReportAdminView extends GetView<ReportAdminController> {
                 flexibleSpace: const FlexibleSpaceBar(
                   title:Text('Race Reports',style: TextStyle(color: Colors.white),),
                 ),
+                automaticallyImplyLeading: false,
+                leading: IconButton(onPressed: (){
+                  Get.toNamed(Routes.RACE_ADMIN);
+                }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
                 actions: [
                   IconButton(
                     icon: const Icon(Icons.refresh, color: Colors.white),
@@ -92,6 +97,10 @@ class ReportAdminView extends GetView<ReportAdminController> {
                     floating: true,
                     pinned: true,
                     backgroundColor: const Color(0xFFDC2626),
+                    automaticallyImplyLeading: false,
+                    leading: IconButton(onPressed: (){
+                      Get.toNamed(Routes.RACE_ADMIN);
+                    }, icon: Icon(Icons.arrow_back,color: Colors.white,)),
                     flexibleSpace: const FlexibleSpaceBar(
                       title: Text('Race Reports',style: TextStyle(color: Colors.white),),
                     ),
