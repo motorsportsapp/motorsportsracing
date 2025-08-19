@@ -1,0 +1,50 @@
+import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get_navigation/src/routes/transitions_type.dart';
+import 'app/routes/app_pages.dart';
+
+class MotorSportEasyApp extends StatelessWidget {
+  final String initialRoute;
+  const MotorSportEasyApp({super.key, required this.initialRoute});
+
+  @override
+  Widget build(BuildContext context) {
+    return  GetMaterialApp(
+      title: "MotorSportEasy",
+      initialRoute: initialRoute,
+      getPages: AppPages.routes,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+          scaffoldBackgroundColor: Colors.white,
+          bottomAppBarTheme: BottomAppBarTheme(
+              color: Colors.white,
+              surfaceTintColor: Colors.white
+          ),
+          appBarTheme: AppBarTheme(
+            backgroundColor: const Color(0xFFDC2626),
+
+          ),
+          switchTheme: SwitchThemeData(
+            trackOutlineColor: WidgetStatePropertyAll<Color>(Colors.white),
+            thumbColor: WidgetStatePropertyAll<Color>(Colors.white),
+          ),
+          inputDecorationTheme: InputDecorationTheme(
+            hintStyle:  TextStyle(
+              color: const Color(0xFF484848),
+              fontSize: 16,
+              fontFamily: 'Inter',
+              fontWeight: FontWeight.w400,
+            ),
+            border: InputBorder.none,
+            enabledBorder: InputBorder.none,
+            focusedBorder: InputBorder.none,
+            labelStyle: TextStyle(
+              fontFamily: 'Inter'
+          )
+          )
+      ),
+      defaultTransition: Transition.fadeIn,
+      transitionDuration: Duration(milliseconds: 30),
+    );
+  }
+}
