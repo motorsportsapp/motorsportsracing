@@ -6,7 +6,6 @@ import 'package:motor_sport_easy/app/modules/widgets/custom_elevated_button.dart
 class ForgotPasswordDialog extends StatelessWidget {
   ForgotPasswordDialog({super.key,});
 
-
   final TextEditingController emailController = TextEditingController();
 
   @override
