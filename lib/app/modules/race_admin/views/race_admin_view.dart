@@ -108,7 +108,9 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-
+                                  IconButton(onPressed: (){
+                                    Get.toNamed(Routes.NOTIFY_DASHBOARD);
+                                  }, icon: Icon(Icons.notification_add_outlined,color: const Color(0xFFDC2626),))
                                 ],
                               ),
                             ],
