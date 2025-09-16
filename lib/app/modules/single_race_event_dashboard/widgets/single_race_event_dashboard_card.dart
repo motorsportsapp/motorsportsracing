@@ -14,6 +14,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
   final int index;
   final bool isHeader;
   final String eventId;
+  final String raceID;
 
   const SingleRaceEventDashboardCard({
     super.key,
@@ -26,6 +27,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
     required this.index,
     this.isHeader = false,
     required this.eventId,
+    required this.raceID,
   });
 
   @override
@@ -110,7 +112,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
               SizedBox(
                 width: screenWidth>600? screenWidth*0.104:70,
                 child: isHeader? Icon(Icons.more_vert):InkWell( onTap:(){
-                  showRequestDialog(context,eventId);
+                  showRequestDialog(context,eventId,raceID);
                 },child:  Icon(Icons.more_vert),),
               ),
             ],
@@ -121,7 +123,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
     );
   }
 
-  Future<void> showRequestDialog(BuildContext context,String eventId) async {
+  Future<void> showRequestDialog(BuildContext context,String eventId,String raceID) async {
 
     final singleRaceEventDashboardController = Get.find<SingleRaceEventDashboardController>();
     return showDialog<void>(
@@ -146,7 +148,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
             CustomElevatedButton(
               level: "Delete Event",
               onTap: (){
-                singleRaceEventDashboardController.deleteEvent(eventId);
+                singleRaceEventDashboardController.deleteEvent(eventId,raceID);
                 Get.back();
               },
             ),
@@ -155,7 +157,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
               level: "Update Event",
               onTap:(){
                 Get.toNamed(
-                    "${Routes.EDIT_EVENT_DASHBOARD}/${singleRaceEventDashboardController.raceID}/$eventId"
+                    "${Routes.EDIT_EVENT_DASHBOARD}/$raceID/$eventId"
                 );
               },
               isBackgroundWhite: true,

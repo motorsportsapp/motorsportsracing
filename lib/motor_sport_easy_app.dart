@@ -16,10 +16,6 @@ class MotorSportEasyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
           scaffoldBackgroundColor: Colors.white,
-          bottomAppBarTheme: BottomAppBarTheme(
-              color: Colors.white,
-              surfaceTintColor: Colors.white
-          ),
           appBarTheme: AppBarTheme(
             backgroundColor: const Color(0xFFDC2626),
 

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:motor_sport_easy/app/modules/race_admin/controllers/race_admin_controller.dart';
 import 'package:motor_sport_easy/app/routes/app_pages.dart';
 
+import '../../single_race_event_dashboard/controllers/single_race_event_dashboard_controller.dart';
 import '../../widgets/custom_elevated_button.dart';
 
 class RaceDashboardCard extends StatelessWidget {
@@ -134,6 +135,8 @@ class RaceDashboardCard extends StatelessWidget {
             CustomElevatedButton(
               level: "All Event",
               onTap:(){
+                final singleRaceEventDashboardController=Get.put(SingleRaceEventDashboardController());
+                singleRaceEventDashboardController.getEventsByRaceId(raceId);
                 Get.offAndToNamed("${Routes.SINGLE_RACE_EVENT_DASHBOARD}/$raceId");
               },
               isBackgroundWhite: true,

@@ -11,6 +11,8 @@ class SingleRaceEventDashboardView
    const SingleRaceEventDashboardView({super.key,});
   @override
   Widget build(BuildContext context) {
+    final raceId = Get.parameters['raceId'];
+    print("raceid from view page: $raceId");
     final mediaQuery = MediaQuery.of(context);
     final double screenWidth = mediaQuery.size.width;
     return Scaffold(
@@ -44,7 +46,7 @@ class SingleRaceEventDashboardView
                                 width: 200,
                                 child: EventCreateButton(
                                   onTap: () {
-                                    Get.toNamed("${Routes.CREATE_EVENT_DASHBOARD}/${controller.raceID}");
+                                    Get.toNamed("${Routes.CREATE_EVENT_DASHBOARD}/$raceId");
                                   },
                                   level: "Create Event",
                                 ),
@@ -73,7 +75,7 @@ class SingleRaceEventDashboardView
                                     child: EventCreateButton(
                                       onTap: () {
                                         Get.toNamed(
-                                          "${Routes.CREATE_EVENT_DASHBOARD}/${controller.raceID}",
+                                          "${Routes.CREATE_EVENT_DASHBOARD}/$raceId",
                                         );
                                       },
                                       level: "Create Event",
@@ -107,6 +109,7 @@ class SingleRaceEventDashboardView
                                 index: 1,
                                 isHeader: true,
                                 eventId: "",
+                                raceID: '',
                               ),
                             ),
                           ),
@@ -139,6 +142,7 @@ class SingleRaceEventDashboardView
                                           .events[index]
                                           .fullDateTime
                                           .toString(),
+                                      raceID: raceId ??'',
                                       sponsor: controller.events[index].logoUrl,
                                       onTap: () {
                                         Get.toNamed(
@@ -189,6 +193,7 @@ class SingleRaceEventDashboardView
                                   index: 1,
                                   isHeader: true,
                                   eventId: "",
+                                  raceID: '',
                                 ),
                               ),
                             ),
@@ -223,6 +228,7 @@ class SingleRaceEventDashboardView
                                             .toString(),
                                         sponsor:
                                             controller.events[index].logoUrl,
+                                        raceID: raceId ??'',
                                         onTap: () {
                                           Get.toNamed(
                                             Routes.EDIT_EVENT_DASHBOARD,

@@ -32,36 +32,42 @@ class RaceAdminView extends GetView<RaceAdminController> {
                     padding: const EdgeInsets.symmetric(horizontal: 12),
                     child: screenWidth < 600
                         ? Column(
-                          children: [
-                            CustomElevatedButton(onTap: (){
-                              Get.toNamed(Routes.REQUEST_ADMIN);
-                            }, level: "Request Race"),
-                            SizedBox(height: 10),
-                            CustomElevatedButton(onTap: (){
-                              Get.toNamed(Routes.REPORT_ADMIN);
-                            }, level: "Report"),
-                            SizedBox(height: 10),
-                            RaceCreateButton(
-                               onTap: () {
-                                 Get.toNamed(Routes.CREATE_RACE_ADMIN);
-                               },
-                             level: "Create a Race",
-                                                           ),
-                            SizedBox(height: 20),
-                            Align(
-                              alignment: Alignment.centerLeft,
-                              child: Text(
-                                'All Racing',
-                                style: TextStyle(
-                                  color: Colors.black,
-                                  fontSize: 40,
-                                  fontFamily: 'Inter',
-                                  fontWeight: FontWeight.w500,
+                            children: [
+                              CustomElevatedButton(
+                                onTap: () {
+                                  Get.toNamed(Routes.REQUEST_ADMIN);
+                                },
+                                level: "Request Race",
+                              ),
+                              SizedBox(height: 10),
+                              CustomElevatedButton(
+                                onTap: () {
+                                  Get.toNamed(Routes.REPORT_ADMIN);
+                                },
+                                level: "Report",
+                              ),
+                              SizedBox(height: 10),
+                              RaceCreateButton(
+                                onTap: () {
+                                  Get.toNamed(Routes.CREATE_RACE_ADMIN);
+                                },
+                                level: "Create a Race",
+                              ),
+                              SizedBox(height: 20),
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text(
+                                  'All Racing',
+                                  style: TextStyle(
+                                    color: Colors.black,
+                                    fontSize: 40,
+                                    fontFamily: 'Inter',
+                                    fontWeight: FontWeight.w500,
+                                  ),
                                 ),
                               ),
-                            ),
-                          ],
-                        )
+                            ],
+                          )
                         : Column(
                             children: [
                               Row(
@@ -87,10 +93,10 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                   Expanded(
                                     child: RaceCreateButton(
                                       onTap: () {
-                                      Get.toNamed(Routes.CREATE_RACE_ADMIN);
+                                        Get.toNamed(Routes.CREATE_RACE_ADMIN);
                                       },
                                       level: "Create a Race",
-                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
@@ -108,9 +114,15 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
-                                  IconButton(onPressed: (){
-                                    Get.toNamed(Routes.NOTIFY_DASHBOARD);
-                                  }, icon: Icon(Icons.notification_add_outlined,color: const Color(0xFFDC2626),))
+                                  IconButton(
+                                    onPressed: () {
+                                      Get.toNamed(Routes.NOTIFY_DASHBOARD);
+                                    },
+                                    icon: Icon(
+                                      Icons.notification_add_outlined,
+                                      color: const Color(0xFFDC2626),
+                                    ),
+                                  ),
                                 ],
                               ),
                             ],
@@ -146,28 +158,31 @@ class RaceAdminView extends GetView<RaceAdminController> {
                             width: screenWidth > 700
                                 ? screenWidth * 0.789
                                 : double.infinity,
-                            child: Obx(()=>ListView.builder(
-                              itemCount: controller.raceList.length,
-                              shrinkWrap: true,
-                              physics: ScrollPhysics(),
-                              itemBuilder: (context, index) {
-                                final race=controller.raceList[index];
-                                return Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: screenWidth > 700 ? 12 : 2,
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(5),
-                                    child: RaceDashboardCard(
-                                      racingName: race.title,
-                                      sponsorLogo: race.logoUrl,
-                                      raceId: race.id,
-                                      index: index,
+                            child: Obx(
+                              () => ListView.builder(
+                                itemCount: controller.raceList.length,
+                                shrinkWrap: true,
+                                physics: ScrollPhysics(),
+                                itemBuilder: (context, index) {
+                                  final race = controller.raceList[index];
+                                  print(race.id);
+                                  return Padding(
+                                    padding: EdgeInsets.symmetric(
+                                      horizontal: screenWidth > 700 ? 12 : 2,
                                     ),
-                                  ),
-                                );
-                              },
-                            ),)
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(5),
+                                      child: RaceDashboardCard(
+                                        racingName: race.title,
+                                        sponsorLogo: race.logoUrl,
+                                        raceId: race.id,
+                                        index: index,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
                           ),
                         ],
                       )
@@ -212,28 +227,31 @@ class RaceAdminView extends GetView<RaceAdminController> {
                               width: screenWidth > 700
                                   ? screenWidth * 0.789
                                   : double.infinity,
-                              child: Obx(()=>ListView.builder(
-                                itemCount: controller.raceList.length,
-                                shrinkWrap: true,
-                                physics: ScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  final race=controller.raceList[index];
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth > 700 ? 12 : 2,
-                                    ),
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(5),
-                                      child: RaceDashboardCard(
-                                        racingName: race.title,
-                                        sponsorLogo: race.logoUrl,
-                                        raceId: race.id,
-                                        index: index,
+                              child: Obx(
+                                () => ListView.builder(
+                                  itemCount: controller.raceList.length,
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    final race = controller.raceList[index];
+                                    print(race.id);
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth > 700 ? 12 : 2,
                                       ),
-                                    ),
-                                  );
-                                },
-                              ),)
+                                      child: Padding(
+                                        padding: const EdgeInsets.all(5),
+                                        child: RaceDashboardCard(
+                                          racingName: race.title,
+                                          sponsorLogo: race.logoUrl,
+                                          raceId: race.id,
+                                          index: index,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              ),
                             ),
                           ],
                         ),

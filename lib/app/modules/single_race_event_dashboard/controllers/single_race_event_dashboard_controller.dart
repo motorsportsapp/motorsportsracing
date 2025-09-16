@@ -1,18 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
-
 import '../../../data/model/event_model/event_model.dart';
 
 class SingleRaceEventDashboardController extends GetxController {
-  final String raceID;
-  SingleRaceEventDashboardController({required this.raceID});
 
   final events = <EventModel>[].obs;
   final isLoading = false.obs;
 
   @override
   void onInit() {
-    getEventsByRaceId(raceID);
     super.onInit();
   }
 
@@ -42,7 +38,7 @@ class SingleRaceEventDashboardController extends GetxController {
   }
 
 
-  Future<void> deleteEvent(String eventId) async {
+  Future<void> deleteEvent(String eventId,String raceID) async {
     try {
       await FirebaseFirestore.instance
           .collection('race')
@@ -61,4 +57,11 @@ class SingleRaceEventDashboardController extends GetxController {
   }
 
 
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    events.clear();
+    super.dispose();
+  }
 }
