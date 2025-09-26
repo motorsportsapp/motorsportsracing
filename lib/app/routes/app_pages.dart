@@ -22,6 +22,10 @@ import '../modules/notification/bindings/notification_binding.dart';
 import '../modules/notification/views/notification_view.dart';
 import '../modules/notify_dashboard/bindings/notify_dashboard_binding.dart';
 import '../modules/notify_dashboard/views/notify_dashboard_view.dart';
+import '../modules/otp_verification/bindings/otp_verification_binding.dart';
+import '../modules/otp_verification/views/otp_verification_view.dart';
+import '../modules/otp_verify/bindings/otp_verify_binding.dart';
+import '../modules/otp_verify/views/otp_verify_view.dart';
 import '../modules/race_admin/bindings/race_admin_binding.dart';
 import '../modules/race_admin/views/race_admin_view.dart';
 import '../modules/racing_details/bindings/racing_details_binding.dart';
@@ -36,7 +40,6 @@ import '../modules/signup/bindings/signup_binding.dart';
 import '../modules/signup/views/signup_view.dart';
 import '../modules/single_race_event_dashboard/bindings/single_race_event_dashboard_binding.dart';
 import '../modules/single_race_event_dashboard/views/single_race_event_dashboard_view.dart';
-import '../modules/update_race_dashboard/bindings/update_race_dashboard_binding.dart';
 import '../modules/update_race_dashboard/views/update_race_dashboard_view.dart';
 
 part 'app_routes.dart';
@@ -47,7 +50,11 @@ class AppPages {
   static const INITIAL = Routes.SIGNUP;
 
   static final routes = [
-    GetPage(name: _Paths.HOME, page: () => HomeView(), binding: HomeBinding()),
+    GetPage(
+        name: _Paths.HOME,
+        page: () => HomeView(),
+        binding: HomeBinding()
+    ),
     GetPage(
       name: _Paths.EVENT,
       page: () => const EventView(),
@@ -74,7 +81,7 @@ class AppPages {
       binding: EventDashboardBinding(),
     ),
     GetPage(
-      name: "${_Paths.EDIT_EVENT_DASHBOARD}/:raceId/:eventId",
+      name: _Paths.EDIT_EVENT_DASHBOARD,
       page: () => const EditEventDashboardView(),
       binding: EditEventDashboardBinding(),
     ),
@@ -113,11 +120,6 @@ class AppPages {
       binding: SingleRaceEventDashboardBinding(),
     ),
     GetPage(
-      name: "${_Paths.UPDATE_RACE_DASHBOARD}/:raceId",
-      page: () => UpdateRaceDashboardView(),
-      binding: UpdateRaceDashboardBinding(),
-    ),
-    GetPage(
       name: _Paths.REQUEST_RACE,
       page: () => RequestRaceView(),
       binding: RequestRaceBinding(),
@@ -142,5 +144,33 @@ class AppPages {
       page: () => const NotifyDashboardView(),
       binding: NotifyDashboardBinding(),
     ),
+    GetPage(
+      name: _Paths.OTP_VERIFICATION,
+      page: () => const OtpVerificationView(),
+      binding: OtpVerificationBinding(),
+    ),
+    GetPage(
+      name: _Paths.OTP_VERIFY,
+      page: () => const OtpVerifyView(),
+      binding: OtpVerifyBinding(),
+    ),
+    GetPage(
+      name: "/race_update_screen",
+      page: () {
+        final parameters = Get.parameters;
+        return UpdateRaceDashboardView(
+          raceData: {
+            'id': int.tryParse(parameters['raceId'] ?? '') ?? 0,
+            'name': parameters['raceName'] ?? 'Default Race',
+            'image_logo': parameters['sponsorLogo'] ?? '',
+            // Backward compatibility
+            'raceId': int.tryParse(parameters['raceId'] ?? '') ?? 0,
+            'raceName': parameters['raceName'] ?? 'Default Race',
+            'sponsorLogo': parameters['sponsorLogo'] ?? '',
+          },
+        );
+      },
+    )
+
   ];
 }

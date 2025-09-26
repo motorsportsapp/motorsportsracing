@@ -20,12 +20,13 @@ abstract class Routes {
   static const RACE_ADMIN = _Paths.RACE_ADMIN;
   static const CREATE_RACE_ADMIN = _Paths.CREATE_RACE_ADMIN;
   static const SINGLE_RACE_EVENT_DASHBOARD = _Paths.SINGLE_RACE_EVENT_DASHBOARD;
-  static const UPDATE_RACE_DASHBOARD = _Paths.UPDATE_RACE_DASHBOARD;
   static const REQUEST_RACE = _Paths.REQUEST_RACE;
   static const REQUEST_ADMIN = _Paths.REQUEST_ADMIN;
   static const REPORT_ADMIN = _Paths.REPORT_ADMIN;
   static const LOGIN_DASHBOARD = _Paths.LOGIN_DASHBOARD;
   static const NOTIFY_DASHBOARD = _Paths.NOTIFY_DASHBOARD;
+  static const OTP_VERIFICATION = _Paths.OTP_VERIFICATION;
+  static const OTP_VERIFY = _Paths.OTP_VERIFY;
 }
 
 abstract class _Paths {
@@ -47,10 +48,11 @@ abstract class _Paths {
   static const RACE_ADMIN = '/race-admin';
   static const CREATE_RACE_ADMIN = '/create-race-admin';
   static const SINGLE_RACE_EVENT_DASHBOARD = '/single-race-event-dashboard';
-  static const UPDATE_RACE_DASHBOARD = '/update-race-dashboard';
   static const REQUEST_RACE = '/request-race';
   static const REQUEST_ADMIN = '/request-admin';
   static const REPORT_ADMIN = '/report-admin';
   static const LOGIN_DASHBOARD = '/login-dashboard';
   static const NOTIFY_DASHBOARD = '/notify-dashboard';
+  static const OTP_VERIFICATION = '/otp-verification';
+  static const OTP_VERIFY = '/otp-verify';
 }

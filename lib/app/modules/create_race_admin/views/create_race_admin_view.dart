@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-
 import 'package:get/get.dart';
-
 import '../../widgets/custom_elevated_button.dart';
 import '../controllers/create_race_admin_controller.dart';
 
@@ -176,7 +174,7 @@ class CreateRaceAdminView extends GetView<CreateRaceAdminController> {
                     child: CustomElevatedButton(
                       onTap: () {
                         if (controller.formKey.currentState!.validate()) {
-                          controller.createRace(context: context);
+                          controller.createRace();
                         }
                       },
                       level: "Create",
@@ -314,7 +312,7 @@ class CreateRaceAdminView extends GetView<CreateRaceAdminController> {
                     onTap: () {
 
                       if (controller.formKey.currentState!.validate()) {
-                        controller.createRace(context: context);
+                        controller.createRace();
                       }
                     },
                     level: "Create",

@@ -146,7 +146,7 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                 child: RaceDashboardCard(
                                   racingName: "Racing",
                                   sponsorLogo: '',
-                                  raceId: "",
+                                  raceId: 0,
                                   index: 1,
                                   isHeader: true,
                                 ),
@@ -160,11 +160,11 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                 : double.infinity,
                             child: Obx(
                               () => ListView.builder(
-                                itemCount: controller.raceList.length,
+                                itemCount: controller.allRacesList.length,
                                 shrinkWrap: true,
                                 physics: ScrollPhysics(),
                                 itemBuilder: (context, index) {
-                                  final race = controller.raceList[index];
+                                  final race = controller.allRacesList[index];
                                   print(race.id);
                                   return Padding(
                                     padding: EdgeInsets.symmetric(
@@ -173,8 +173,8 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                     child: Padding(
                                       padding: const EdgeInsets.all(5),
                                       child: RaceDashboardCard(
-                                        racingName: race.title,
-                                        sponsorLogo: race.logoUrl,
+                                        racingName: race.name,
+                                        sponsorLogo: race.imageLogo,
                                         raceId: race.id,
                                         index: index,
                                       ),
@@ -215,7 +215,7 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                   child: RaceDashboardCard(
                                     racingName: "Race",
                                     sponsorLogo: '',
-                                    raceId: "",
+                                    raceId: 0,
                                     index: 1,
                                     isHeader: true,
                                   ),
@@ -229,11 +229,11 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                   : double.infinity,
                               child: Obx(
                                 () => ListView.builder(
-                                  itemCount: controller.raceList.length,
+                                  itemCount: controller.allRacesList.length,
                                   shrinkWrap: true,
                                   physics: ScrollPhysics(),
                                   itemBuilder: (context, index) {
-                                    final race = controller.raceList[index];
+                                    final race = controller.allRacesList[index];
                                     print(race.id);
                                     return Padding(
                                       padding: EdgeInsets.symmetric(
@@ -242,8 +242,8 @@ class RaceAdminView extends GetView<RaceAdminController> {
                                       child: Padding(
                                         padding: const EdgeInsets.all(5),
                                         child: RaceDashboardCard(
-                                          racingName: race.title,
-                                          sponsorLogo: race.logoUrl,
+                                          racingName: race.name,
+                                          sponsorLogo: race.imageLogo,
                                           raceId: race.id,
                                           index: index,
                                         ),

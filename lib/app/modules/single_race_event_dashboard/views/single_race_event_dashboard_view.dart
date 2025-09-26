@@ -5,10 +5,11 @@ import '../../../routes/app_pages.dart';
 import '../../event_dashboard/widgets/event_create_button.dart';
 import '../controllers/single_race_event_dashboard_controller.dart';
 import '../widgets/single_race_event_dashboard_card.dart';
+import 'package:intl/intl.dart';
 
 class SingleRaceEventDashboardView
     extends GetView<SingleRaceEventDashboardController> {
-   const SingleRaceEventDashboardView({super.key,});
+  const SingleRaceEventDashboardView({super.key});
   @override
   Widget build(BuildContext context) {
     final raceId = Get.parameters['raceId'];
@@ -46,7 +47,9 @@ class SingleRaceEventDashboardView
                                 width: 200,
                                 child: EventCreateButton(
                                   onTap: () {
-                                    Get.toNamed("${Routes.CREATE_EVENT_DASHBOARD}/$raceId");
+                                    Get.toNamed(
+                                      "${Routes.CREATE_EVENT_DASHBOARD}/$raceId",
+                                    );
                                   },
                                   level: "Create Event",
                                 ),
@@ -54,12 +57,16 @@ class SingleRaceEventDashboardView
                             ],
                           )
                         : Column(
-                          children: [
-                            CustomElevatedButton(onTap: (){
-                              Get.toNamed(Routes.RACE_ADMIN);
-                            }, level: "Dashboard"),
-                            Row(
-                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              CustomElevatedButton(
+                                onTap: () {
+                                  Get.toNamed(Routes.RACE_ADMIN);
+                                },
+                                level: "Dashboard",
+                              ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 children: [
                                   Text(
                                     'All events',
@@ -83,8 +90,8 @@ class SingleRaceEventDashboardView
                                   ),
                                 ],
                               ),
-                          ],
-                        ),
+                            ],
+                          ),
                   ),
                 ),
                 SizedBox(height: 10),
@@ -108,8 +115,9 @@ class SingleRaceEventDashboardView
                                 onTap: () {},
                                 index: 1,
                                 isHeader: true,
-                                eventId: "",
-                                raceID: '',
+                                eventId: 0,
+                                raceID: 0,
+                                radiobroadcastChannel: "",
                               ),
                             ),
                           ),
@@ -118,44 +126,72 @@ class SingleRaceEventDashboardView
                             width: screenWidth > 700
                                 ? screenWidth * 0.789
                                 : double.infinity,
-                            child: Obx(
-                              () => ListView.builder(
-                                itemCount: controller.events.length,
-                                shrinkWrap: true,
-                                physics: ScrollPhysics(),
-                                itemBuilder: (context, index) {
-                                  return Padding(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth > 700 ? 12 : 2,
-                                    ),
-                                    child: SingleRaceEventDashboardCard(
-                                      broadcastChannel: controller
-                                          .events[index]
-                                          .broadcastChannel,
-                                      location:
-                                          controller.events[index].location,
-                                      time: controller
-                                          .events[index]
-                                          .fullDateTime
-                                          .toString(),
-                                      date: controller
-                                          .events[index]
-                                          .fullDateTime
-                                          .toString(),
-                                      raceID: raceId ??'',
-                                      sponsor: controller.events[index].logoUrl,
-                                      onTap: () {
-                                        Get.toNamed(
-                                          Routes.EDIT_EVENT_DASHBOARD,
-                                        );
-                                      },
-                                      index: index,
-                                      eventId:  controller.events[index].id,
-                                    ),
-                                  );
-                                },
-                              ),
-                            ),
+                            child: Obx(() {
+                              if (controller.isLoading.value) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              if (controller.selectedRace.value == null ||
+                                  controller.selectedRace.value?.events ==
+                                      null) {
+                                return Center(child: Text("No data found"));
+                              }
+                              if (controller
+                                  .selectedRace
+                                  .value!
+                                  .events
+                                  .isEmpty) {
+                                return Center(child: Text("No Event found"));
+                              } else {
+                                return ListView.builder(
+                                  itemCount: controller
+                                      .selectedRace
+                                      .value
+                                      ?.events
+                                      .length,
+                                  shrinkWrap: true,
+                                  physics: ScrollPhysics(),
+                                  itemBuilder: (context, index) {
+                                    final event = controller
+                                        .selectedRace
+                                        .value
+                                        ?.events[index];
+                                    DateTime datetime = event!.startedAt;
+                                    String date = DateFormat(
+                                      'dd/MM/yyyy',
+                                    ).format(datetime);
+                                    String time = DateFormat(
+                                      'hh:mm a',
+                                    ).format(datetime);
+
+                                    return Padding(
+                                      padding: EdgeInsets.symmetric(
+                                        horizontal: screenWidth > 700 ? 12 : 2,
+                                      ),
+                                      child: SingleRaceEventDashboardCard(
+                                        broadcastChannel:
+                                            event.tvBroadcastChanel,
+                                        location: event.location,
+                                        time: time,
+                                        date: date,
+                                        sponsor: controller
+                                            .selectedRace
+                                            .value!
+                                            .imageLogo,
+                                        onTap: () {},
+                                        index: 1,
+                                        isHeader: false,
+                                        eventId: event.id,
+                                        raceID: event.raceId,
+                                        radiobroadcastChannel:
+                                            event.radioBroadcastChanel,
+                                      ),
+                                    );
+                                  },
+                                );
+                              }
+                            }),
                           ),
                         ],
                       )
@@ -192,8 +228,9 @@ class SingleRaceEventDashboardView
                                   onTap: () {},
                                   index: 1,
                                   isHeader: true,
-                                  eventId: "",
-                                  raceID: '',
+                                  eventId: 0,
+                                  raceID: 0,
+                                  radiobroadcastChannel: "",
                                 ),
                               ),
                             ),
@@ -202,45 +239,74 @@ class SingleRaceEventDashboardView
                               width: screenWidth > 700
                                   ? screenWidth * 0.789
                                   : double.infinity,
-                              child: Obx(
-                                () => ListView.builder(
-                                  itemCount: controller.events.length,
-                                  shrinkWrap: true,
-                                  physics: ScrollPhysics(),
-                                  itemBuilder: (context, index) {
-                                    return Padding(
-                                      padding: EdgeInsets.symmetric(
-                                        horizontal: screenWidth > 700 ? 12 : 2,
-                                      ),
-                                      child: SingleRaceEventDashboardCard(
-                                        broadcastChannel: controller
-                                            .events[index]
-                                            .broadcastChannel,
-                                        location:
-                                            controller.events[index].location,
-                                        time: controller
-                                            .events[index]
-                                            .fullDateTime
-                                            .toString(),
-                                        date: controller
-                                            .events[index]
-                                            .fullDateTime
-                                            .toString(),
-                                        sponsor:
-                                            controller.events[index].logoUrl,
-                                        raceID: raceId ??'',
-                                        onTap: () {
-                                          Get.toNamed(
-                                            Routes.EDIT_EVENT_DASHBOARD,
-                                          );
-                                        },
-                                        index: index,
-                                        eventId: controller.events[index].id,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
+                              child: Obx(() {
+                                if (controller.isLoading.value) {
+                                  return Center(
+                                    child: CircularProgressIndicator(),
+                                  );
+                                }
+                                if (controller.selectedRace.value == null ||
+                                    controller.selectedRace.value?.events ==
+                                        null) {
+                                  return Center(child: Text("No data found"));
+                                }
+                                if (controller
+                                    .selectedRace
+                                    .value!
+                                    .events
+                                    .isEmpty) {
+                                  return Center(child: Text("No Event found"));
+                                } else {
+                                  return ListView.builder(
+                                    itemCount: controller
+                                        .selectedRace
+                                        .value
+                                        ?.events
+                                        .length,
+                                    shrinkWrap: true,
+                                    physics: ScrollPhysics(),
+                                    itemBuilder: (context, index) {
+                                      final event = controller
+                                          .selectedRace
+                                          .value
+                                          ?.events[index];
+                                      DateTime datetime = event!.startedAt;
+                                      String date = DateFormat(
+                                        'dd/MM/yyyy',
+                                      ).format(datetime);
+                                      String time = DateFormat(
+                                        'hh:mm a',
+                                      ).format(datetime);
+
+                                      return Padding(
+                                        padding: EdgeInsets.symmetric(
+                                          horizontal: screenWidth > 700
+                                              ? 12
+                                              : 2,
+                                        ),
+                                        child: SingleRaceEventDashboardCard(
+                                          broadcastChannel:
+                                              event.tvBroadcastChanel,
+                                          location: event.location,
+                                          time: time,
+                                          date: date,
+                                          sponsor: controller
+                                              .selectedRace
+                                              .value!
+                                              .imageLogo,
+                                          onTap: () {},
+                                          index: 1,
+                                          isHeader: false,
+                                          eventId: event.id,
+                                          raceID: event.raceId,
+                                          radiobroadcastChannel:
+                                              event.radioBroadcastChanel,
+                                        ),
+                                      );
+                                    },
+                                  );
+                                }
+                              }),
                             ),
                           ],
                         ),
@@ -252,6 +318,4 @@ class SingleRaceEventDashboardView
       ),
     );
   }
-
-
 }

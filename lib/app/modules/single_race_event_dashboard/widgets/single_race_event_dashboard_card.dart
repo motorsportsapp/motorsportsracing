@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:motor_sport_easy/app/routes/app_pages.dart';
+import '../../../../api_services/event_api_services/event_api_services.dart';
 import '../../widgets/custom_elevated_button.dart';
 import '../controllers/single_race_event_dashboard_controller.dart';
 
 class SingleRaceEventDashboardCard extends StatelessWidget {
   final String broadcastChannel;
+  final String radiobroadcastChannel;
+
   final String location;
   final String time;
   final String date;
@@ -13,12 +16,13 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
   final VoidCallback onTap;
   final int index;
   final bool isHeader;
-  final String eventId;
-  final String raceID;
+  final int eventId;
+  final int raceID;
 
   const SingleRaceEventDashboardCard({
     super.key,
     required this.broadcastChannel,
+    required this.radiobroadcastChannel,
     required this.location,
     required this.time,
     required this.date,
@@ -39,8 +43,8 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
       children: [
         Container(
           width: double.infinity,
-          height: screenWidth>600?80:60,
-          padding: EdgeInsets.symmetric(horizontal: screenWidth>700 ?12:4),
+          height: screenWidth > 600 ? 80 : 60,
+          padding: EdgeInsets.symmetric(horizontal: screenWidth > 700 ? 12 : 4),
           decoration: BoxDecoration(
             color: isHeader
                 ? Color(0xFFFFD4D4)
@@ -54,12 +58,12 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SizedBox(
-                width: screenWidth>600? screenWidth*0.104:80,
+                width: screenWidth > 600 ? screenWidth * 0.104 : 80,
                 child: Text(
                   broadcastChannel,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: screenWidth>600?19:14,
+                    fontSize: screenWidth > 600 ? 19 : 14,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
                   ),
@@ -68,12 +72,12 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: screenWidth>600? screenWidth*0.104:65,
+                width: screenWidth > 600 ? screenWidth * 0.104 : 65,
                 child: Text(
                   location,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: screenWidth>600?19:14,
+                    fontSize: screenWidth > 600 ? 19 : 14,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
                   ),
@@ -82,12 +86,12 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: screenWidth>700? screenWidth*0.104:50,
+                width: screenWidth > 700 ? screenWidth * 0.104 : 50,
                 child: Text(
                   time,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: screenWidth>600?19:14,
+                    fontSize: screenWidth > 600 ? 19 : 14,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
                   ),
@@ -96,12 +100,12 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: screenWidth>600? screenWidth*0.104:50,
+                width: screenWidth > 600 ? screenWidth * 0.104 : 50,
                 child: Text(
                   date,
                   style: TextStyle(
                     color: Colors.black,
-                    fontSize: screenWidth>600?19:14,
+                    fontSize: screenWidth > 600 ? 19 : 14,
                     fontFamily: 'Inter',
                     fontWeight: FontWeight.w400,
                   ),
@@ -110,10 +114,34 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
                 ),
               ),
               SizedBox(
-                width: screenWidth>600? screenWidth*0.104:70,
-                child: isHeader? Icon(Icons.more_vert):InkWell( onTap:(){
-                  showRequestDialog(context,eventId,raceID);
-                },child:  Icon(Icons.more_vert),),
+                width: screenWidth > 600 ? screenWidth * 0.104 : 70,
+                child: isHeader
+                    ? Icon(Icons.no_accounts)
+                    : InkWell(
+                        onTap: () {
+                          print("Event ID: $eventId");
+                          print("Race ID: $raceID");
+
+                          Map<String, dynamic> eventUpdateData = {
+                            'event_id': eventId, // Use consistent key name
+                            'race_id': raceID, // Use consistent key name
+                            'tv_broadcast_chanel': broadcastChannel,
+                            'radio_broadcast_chanel': radiobroadcastChannel,
+                            'location': location,
+                            'date': DateTime.now(),
+                            'time': TimeOfDay.now(),
+                          };
+
+                          print("Event data for update: $eventUpdateData");
+                          showRequestDialog(
+                            context,
+                            eventId,
+                            raceID,
+                            eventUpdateData,
+                          );
+                        },
+                        child: Icon(Icons.more_vert),
+                      ),
               ),
             ],
           ),
@@ -122,53 +150,78 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
       ],
     );
   }
+}
 
-  Future<void> showRequestDialog(BuildContext context,String eventId,String raceID) async {
-
-    final singleRaceEventDashboardController = Get.find<SingleRaceEventDashboardController>();
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(
-            'What is you want to do?',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
+Future<void> showRequestDialog(
+  BuildContext context,
+  int eventId,
+  int raceID,
+  Map<String, dynamic> eventUpdateData,
+) async {
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text(
+          'What do you want to do?',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
           ),
-          content: SizedBox(
-            height: 10,
-            width: 300,
+        ),
+        content: SizedBox(
+          height: 60, // Increased height for better appearance
+          width: 300,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Event ID: $eventId'),
+              Text('Race ID: $raceID'),
+              Text('Location: ${eventUpdateData['location']}'),
+            ],
           ),
-          actions: <Widget>[
-            CustomElevatedButton(
-              level: "Delete Event",
-              onTap: (){
-                singleRaceEventDashboardController.deleteEvent(eventId,raceID);
-                Get.back();
-              },
-            ),
-            SizedBox(height: 10,),
-            CustomElevatedButton(
-              level: "Update Event",
-              onTap:(){
-                Get.toNamed(
-                    "${Routes.EDIT_EVENT_DASHBOARD}/$raceID/$eventId"
-                );
-              },
-              isBackgroundWhite: true,
-              isBorderRed: true,
-            ),
+        ),
+        actions: <Widget>[
+          CustomElevatedButton(
+            level: "Delete Event",
+            onTap: () async {
+              Get.back();
+             await EventApiService.deleteEvent(eventId);
+            },
+          ),
+          SizedBox(height: 10),
+          CustomElevatedButton(
+            level: "Update Event",
+            onTap: () {
+              // Ensure all required data is included
+              final completeEventData = {
+                'event_id': eventId,
+                'race_id': raceID,
+                'tv_broadcast_chanel': eventUpdateData['tv_broadcast_chanel'],
+                'radio_broadcast_chanel':
+                    eventUpdateData['radio_broadcast_chanel'],
+                'location': eventUpdateData['location'],
+                'date': eventUpdateData['date'],
+                'time': eventUpdateData['time'],
+              };
 
-          ],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        );
-      },
-    );
-  }
+              print('=== Navigating with Data ===');
+              print('Complete event data: $completeEventData');
 
+              Get.toNamed(
+                Routes.EDIT_EVENT_DASHBOARD,
+                arguments: completeEventData,
+              );
+            },
+            isBackgroundWhite: true,
+            isBorderRed: true,
+          ),
+        ],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      );
+    },
+  );
 }

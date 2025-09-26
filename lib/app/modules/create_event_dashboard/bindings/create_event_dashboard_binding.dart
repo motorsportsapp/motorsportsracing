@@ -7,11 +7,11 @@ class CreateEventDashboardBinding extends Bindings {
   void dependencies() {
     final raceId = Get.parameters['raceId'] ?? Get.arguments["raceId"];
     if (raceId == null || raceId.isEmpty) {
-
+      Get.snackbar('Error', 'Invalid race ID');
     }
     Get.lazyPut<CreateEventDashboardController>(
       () => CreateEventDashboardController(
-        raceID: raceId,
+        raceID: int.parse(raceId),
       ),
     );
   }

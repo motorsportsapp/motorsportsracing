@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:motor_sport_easy/app/modules/race_admin/controllers/race_admin_controller.dart';
+import 'package:motor_sport_easy/api_services/race_api_services/race_api_services.dart';
 import 'package:motor_sport_easy/app/routes/app_pages.dart';
-
 import '../../single_race_event_dashboard/controllers/single_race_event_dashboard_controller.dart';
+import '../../update_race_dashboard/views/update_race_dashboard_view.dart';
 import '../../widgets/custom_elevated_button.dart';
 
 class RaceDashboardCard extends StatelessWidget {
@@ -11,7 +11,7 @@ class RaceDashboardCard extends StatelessWidget {
   final String sponsorLogo;
   final int index;
   final bool isHeader;
-  final String raceId;
+  final int raceId;
 
   const RaceDashboardCard({
     super.key,
@@ -89,7 +89,7 @@ class RaceDashboardCard extends StatelessWidget {
                     ? Icon(Icons.more_vert)
                     : InkWell(
                     onTap: (){
-                      showRequestDialog(context,raceId);
+                      showRequestDialog(context,raceId,racingName,sponsorLogo);
                     },
 
                     child: Icon(Icons.more_vert)
@@ -101,61 +101,77 @@ class RaceDashboardCard extends StatelessWidget {
       ),
     );
   }
+}
 
 
-  Future<void> showRequestDialog(BuildContext context, String raceId) async {
-    final raceAdminController = Get.find<RaceAdminController>();
-    return showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.white,
-          title: Text(
-            'What is you want to do?',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontFamily: 'Inter',
-              fontWeight: FontWeight.w400,
-            ),
+Future<void> showRequestDialog(BuildContext context, int raceId,String raceName, String sponsorLogo ) async {
+
+  return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        backgroundColor: Colors.white,
+        title: Text(
+          'What is you want to do?',
+          style: TextStyle(
+            color: Colors.black,
+            fontSize: 16,
+            fontFamily: 'Inter',
+            fontWeight: FontWeight.w400,
           ),
-          content: SizedBox(
-            height: 10,
-            width: 300,
+        ),
+        content: SizedBox(
+          height: 10,
+          width: 300,
+        ),
+        actions: <Widget>[
+          CustomElevatedButton(
+            level: "Delete Series",
+            onTap: () async {
+              Get.back();
+              await RaceApiService.deletedRace(raceId);
+            },
           ),
-          actions: <Widget>[
-            CustomElevatedButton(
-              level: "Delete Series",
-              onTap: (){
-                raceAdminController.deleteRace(raceId);
-                Get.back();
-              },
-            ),
-            SizedBox(height: 10,),
-            CustomElevatedButton(
-              level: "All Event",
-              onTap:(){
-                final singleRaceEventDashboardController=Get.put(SingleRaceEventDashboardController());
-                singleRaceEventDashboardController.getEventsByRaceId(raceId);
-                Get.offAndToNamed("${Routes.SINGLE_RACE_EVENT_DASHBOARD}/$raceId");
-              },
-              isBackgroundWhite: true,
-              isBorderRed: true,
-            ),
-            SizedBox(height: 10,),
-            CustomElevatedButton(
-              level: "Update Series",
-              onTap: (){
-                Get.toNamed("${Routes.UPDATE_RACE_DASHBOARD}/$raceId");
-                },
-            ),
+          SizedBox(height: 10,),
+          CustomElevatedButton(
+            level: "All Event",
+            onTap:(){
+              final singleRaceEventDashboardController=Get.put(SingleRaceEventDashboardController(raceId: raceId));
+              singleRaceEventDashboardController.fetchRaceById(raceId);
+              Get.offAndToNamed("${Routes.SINGLE_RACE_EVENT_DASHBOARD}/$raceId");
+            },
+            isBackgroundWhite: true,
+            isBorderRed: true,
+          ),
+          SizedBox(height: 10,),
+          CustomElevatedButton(
+            level: "Update Series",
+            onTap: () {
+              if (raceName.isNotEmpty && sponsorLogo.isNotEmpty) {
+                Map<String, dynamic> data = {
+                  'id': raceId,
+                  'name': raceName,
+                  'image_logo': sponsorLogo,
+                };
 
-          ],
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-        );
-      },
-    );
-  }
+                Get.toNamed(
+                  '/race_update_screen',
+                  parameters: {
+                    'raceId': data['id'].toString(),
+                    'raceName': data['name'],
+                    'sponsorLogo': data['image_logo'],
+                  },
+                );
+              } else {
+                Get.snackbar("Error", "Missing race data, cannot navigate!");
+              }
+            },
+          ),
 
 
+        ],
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
+      );
+    },
+  );
 }

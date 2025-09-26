@@ -14,7 +14,9 @@ class SingleRaceEventDashboardBinding extends Bindings {
       throw "Race ID is required for SingleRaceEventDashboardController";
     }
     Get.lazyPut<SingleRaceEventDashboardController>(
-      () => SingleRaceEventDashboardController(),
+      () => SingleRaceEventDashboardController(
+        raceId: int.parse(raceId),
+      ),
     );
   }
 }

@@ -3,9 +3,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 import 'package:motor_sport_easy/app/modules/single_race_event_dashboard/controllers/single_race_event_dashboard_controller.dart';
+import 'package:motor_sport_easy/app/routes/app_pages.dart';
+
+import '../../../../api_services/event_api_services/event_api_services.dart';
 
 class CreateEventDashboardController extends GetxController {
-final String raceID;
+final int raceID;
 CreateEventDashboardController({required this.raceID});
   final singleRaceEventController=Get.find<SingleRaceEventDashboardController>();
   final formKey = GlobalKey<FormState>();
@@ -16,10 +19,10 @@ CreateEventDashboardController({required this.raceID});
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
 
-  // Date & Time
-  var selectedDate = Rxn<DateTime>();
-  var selectedTime = Rxn<TimeOfDay>();
-
+// Date & Time Pickers
+var selectedDate = Rxn<DateTime>();
+var selectedTime = Rxn<TimeOfDay>();
+  /// Pick Date
   Future<void> pickDate({required BuildContext context}) async {
     final picked = await showDatePicker(
       context: context,
@@ -34,6 +37,7 @@ CreateEventDashboardController({required this.raceID});
     }
   }
 
+  /// Pick Time
   Future<void> pickTime({required BuildContext context}) async {
     final pickedTime = await showTimePicker(
       context: context,
@@ -46,49 +50,37 @@ CreateEventDashboardController({required this.raceID});
     }
   }
 
-  Future<void> addEvent({required BuildContext context, required String raceId}) async {
-    if (!formKey.currentState!.validate()) return;
 
-    try {
-      // Combine date and time
-      DateTime? eventDateTime;
-      if (selectedDate.value != null && selectedTime.value != null) {
-        eventDateTime = DateTime(
-          selectedDate.value!.year,
-          selectedDate.value!.month,
-          selectedDate.value!.day,
-          selectedTime.value!.hour,
-          selectedTime.value!.minute,
-        );
-      }
+  /// Convert Date + Time -> ISO 8601 String (UTC)
+  String? get startedAt {
+    if (selectedDate.value != null && selectedTime.value != null) {
+      final dt = DateTime(
+        selectedDate.value!.year,
+        selectedDate.value!.month,
+        selectedDate.value!.day,
+        selectedTime.value!.hour,
+        selectedTime.value!.minute,
+      );
+      return dt.toUtc().toIso8601String(); // e.g. 2025-09-26T04:33:00.000Z
+    }
+    return null;
+  }
 
-      // Create event data
-      final eventData = {
-        'title': broadcastNameController.text,
-        'location': locationController.text,
-        'date': selectedDate.value != null
-            ? Timestamp.fromDate(selectedDate.value!)
-            : null,
-        'time': selectedTime.value != null
-            ? {
-          'hour': selectedTime.value!.hour,
-          'minute': selectedTime.value!.minute,
-        }
-            : null,
-        'fullDateTime': eventDateTime != null
-            ? Timestamp.fromDate(eventDateTime)
-            : null,
-        'createdAt': FieldValue.serverTimestamp(),
+
+  Future<void> createEvent()async{
+    try{
+      if (!formKey.currentState!.validate()) return;
+
+      Map<String,dynamic> data={
+        "tv_broadcast_chanel": broadcastNameController.text,
+        "radio_broadcast_chanel": "Default",
+        "location": locationController.text,
+        "started_at": startedAt,
+        "race_id": raceID
       };
 
-      DocumentReference docRef =  await FirebaseFirestore.instance
-          .collection('race')
-          .doc(raceId)
-          .collection('events')
-          .add(eventData);
-
-      DocumentSnapshot snapshot = await docRef.get();
-      if (snapshot.exists) {
+      final response=await EventApiService.createEvent(data);
+      if(response.statusCode==201){
         Get.snackbar('Success', 'Event created successfully');
         // Clear form fields
         broadcastNameController.clear();
@@ -97,18 +89,15 @@ CreateEventDashboardController({required this.raceID});
         timeController.clear();
         selectedDate.value = null;
         selectedTime.value = null;
-
-        //get all data
-        singleRaceEventController.getEventsByRaceId(raceId);
-
-
-      } else {
+        singleRaceEventController.fetchRaceById(raceID);
+        Get.toNamed(Routes.SINGLE_RACE_EVENT_DASHBOARD);
+      }
+      else{
         Get.snackbar('Error', 'Event creation failed');
-
       }
 
-    } catch (e) {
-      Get.snackbar('Error', 'Failed to create event: $e');
+    }catch(e){
+      throw Exception('Failed to create event $e');
     }
   }
 

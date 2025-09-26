@@ -292,7 +292,7 @@ class CreateEventDashboardView extends GetView<CreateEventDashboardController> {
                           child: CustomElevatedButton(
                             onTap: () {
                               if (controller.formKey.currentState!.validate()) {
-                                controller.addEvent(context: context,raceId: controller.raceID);
+                                controller.createEvent();
                               }
                             },
                             level: "Create a event",
@@ -535,7 +535,7 @@ class CreateEventDashboardView extends GetView<CreateEventDashboardController> {
                           onTap: () {
 
                             if (controller.formKey.currentState!.validate()) {
-                              controller.addEvent(context: context,raceId: controller.raceID);
+                              controller.createEvent();
                             }
                           },
                           level: "Create a event",
