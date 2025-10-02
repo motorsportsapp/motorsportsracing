@@ -4,6 +4,9 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as https;
 import 'package:motor_sport_easy/api_services/contants.dart';
 
+import '../../../routes/app_pages.dart';
+import '../../race_admin/controllers/race_admin_controller.dart';
+
 
 class NotifyDashboardController extends GetxController {
   final TextEditingController notificationController = TextEditingController();
@@ -25,6 +28,9 @@ class NotifyDashboardController extends GetxController {
         Get.snackbar('Success', 'Notification created successfully');
         // Clear form fields
         notificationController.clear();
+        final raceAdminController = Get.put(RaceAdminController());
+        await raceAdminController.fetchAllRaces();
+        Get.offNamed(Routes.RACE_ADMIN);
       } else {
         Get.snackbar('Error', 'Notification creation failed');
       }

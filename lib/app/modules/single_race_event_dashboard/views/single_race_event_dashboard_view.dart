@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:motor_sport_easy/app/modules/widgets/custom_elevated_button.dart';
 import '../../../routes/app_pages.dart';
 import '../../event_dashboard/widgets/event_create_button.dart';
+import '../../race_admin/controllers/race_admin_controller.dart';
 import '../controllers/single_race_event_dashboard_controller.dart';
 import '../widgets/single_race_event_dashboard_card.dart';
 import 'package:intl/intl.dart';
@@ -59,8 +60,10 @@ class SingleRaceEventDashboardView
                         : Column(
                             children: [
                               CustomElevatedButton(
-                                onTap: () {
-                                  Get.toNamed(Routes.RACE_ADMIN);
+                                onTap: () async {
+                                  final raceAdminController = Get.put(RaceAdminController());
+                                  await raceAdminController.fetchAllRaces();
+                                  Get.offNamed(Routes.RACE_ADMIN);
                                 },
                                 level: "Dashboard",
                               ),
@@ -157,7 +160,10 @@ class SingleRaceEventDashboardView
                                         .selectedRace
                                         .value
                                         ?.events[index];
-                                    DateTime datetime = event!.startedAt;
+                                    DateTime internationalTime = event!.startedAt;
+                                    DateTime datetime = internationalTime.toLocal();
+                                    print("start date form listview builder event.startAt::::::: ${event.startedAt}");
+                                    print("start date form listview builder datetime::::::: $datetime");
                                     String date = DateFormat(
                                       'dd/MM/yyyy',
                                     ).format(datetime);
@@ -270,7 +276,9 @@ class SingleRaceEventDashboardView
                                           .selectedRace
                                           .value
                                           ?.events[index];
-                                      DateTime datetime = event!.startedAt;
+
+                                      DateTime internationalTime = event!.startedAt;
+                                      DateTime datetime = internationalTime.toLocal();
                                       String date = DateFormat(
                                         'dd/MM/yyyy',
                                       ).format(datetime);

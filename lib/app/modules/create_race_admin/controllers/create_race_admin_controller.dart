@@ -1,6 +1,8 @@
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import '../../../../api_services/race_api_services/race_api_services.dart';
+import '../../../routes/app_pages.dart';
+import '../../race_admin/controllers/race_admin_controller.dart';
 
 class CreateRaceAdminController extends GetxController {
   final formKey = GlobalKey<FormState>();
@@ -24,6 +26,9 @@ class CreateRaceAdminController extends GetxController {
         raceNameController.clear();
         imageUrlController.clear();
         formKey.currentState!.reset();
+        final raceAdminController = Get.put(RaceAdminController());
+        await raceAdminController.fetchAllRaces();
+        Get.offNamed(Routes.RACE_ADMIN);
       } else {
         Get.snackbar('Error', 'race creation failed');
         print("error: ${response.statusCode}");

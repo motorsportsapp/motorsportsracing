@@ -89,8 +89,8 @@ var selectedTime = Rxn<TimeOfDay>();
         timeController.clear();
         selectedDate.value = null;
         selectedTime.value = null;
-        singleRaceEventController.fetchRaceById(raceID);
-        Get.toNamed(Routes.SINGLE_RACE_EVENT_DASHBOARD);
+        await singleRaceEventController.fetchRaceById(raceID);
+        Get.offNamed(Routes.RACE_ADMIN);
       }
       else{
         Get.snackbar('Error', 'Event creation failed');

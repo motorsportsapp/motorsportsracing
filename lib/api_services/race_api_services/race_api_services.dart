@@ -53,6 +53,7 @@ class RaceApiService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonData = json.decode(response.body);
+
         return RaceAPIModel.fromJson(jsonData);
       } else {
         throw Exception('Failed to load race: ${response.statusCode}');
