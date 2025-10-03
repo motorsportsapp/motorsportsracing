@@ -17,7 +17,7 @@ class NotifyDashboardController extends GetxController {
       final notifyData = {
 
         'description': notificationController.text,
-        "title": "Important announcement from MotorGp team!",
+        "title": "Important announcement from MSE team!",
       };
       final response=await https.post(
         Uri.parse('$baseUrl/promotions/'),

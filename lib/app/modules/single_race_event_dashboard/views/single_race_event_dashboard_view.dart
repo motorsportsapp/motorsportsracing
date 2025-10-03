@@ -14,7 +14,6 @@ class SingleRaceEventDashboardView
   @override
   Widget build(BuildContext context) {
     final raceId = Get.parameters['raceId'];
-    print("raceid from view page: $raceId");
     final mediaQuery = MediaQuery.of(context);
     final double screenWidth = mediaQuery.size.width;
     return Scaffold(

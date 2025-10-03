@@ -20,15 +20,13 @@ class LoginDashboardController extends GetxController {
 
       if(email=="stewartbrown195111@gmail.com" && password=="stewartbrown195111"){
         Get.offAndToNamed(Routes.RACE_ADMIN);
+        Get.snackbar("Wow", "Successfully Login");
+      }else{
+        Get.snackbar("Error", "Invalid email or password");
       }
 
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Logged in as $email')));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Please enter email and password')),
-      );
+      Get.snackbar("Error", "Please enter email and password");
     }
   }
 }

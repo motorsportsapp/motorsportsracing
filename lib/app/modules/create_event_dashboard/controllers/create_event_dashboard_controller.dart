@@ -14,7 +14,8 @@ CreateEventDashboardController({required this.raceID});
   final formKey = GlobalKey<FormState>();
 
   // Controllers
-  final TextEditingController broadcastNameController = TextEditingController();
+  final TextEditingController broadcastTvChanelController = TextEditingController();
+  final TextEditingController broadcastRadioController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
   final TextEditingController timeController = TextEditingController();
@@ -72,8 +73,8 @@ var selectedTime = Rxn<TimeOfDay>();
       if (!formKey.currentState!.validate()) return;
 
       Map<String,dynamic> data={
-        "tv_broadcast_chanel": broadcastNameController.text,
-        "radio_broadcast_chanel": "Default",
+        "tv_broadcast_chanel": broadcastTvChanelController.text,
+        "radio_broadcast_chanel": broadcastRadioController.text,
         "location": locationController.text,
         "started_at": startedAt,
         "race_id": raceID
@@ -83,7 +84,8 @@ var selectedTime = Rxn<TimeOfDay>();
       if(response.statusCode==201){
         Get.snackbar('Success', 'Event created successfully');
         // Clear form fields
-        broadcastNameController.clear();
+        broadcastTvChanelController.clear();
+        broadcastRadioController.clear();
         locationController.clear();
         dateController.clear();
         timeController.clear();
@@ -105,7 +107,8 @@ var selectedTime = Rxn<TimeOfDay>();
 
   @override
   void dispose() {
-    broadcastNameController.dispose();
+    broadcastTvChanelController.dispose();
+    broadcastRadioController.dispose();
     locationController.dispose();
     dateController.dispose();
     timeController.dispose();
