@@ -2,6 +2,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:motor_sport_easy/api_services/race_api_services/race_api_services.dart';
+import 'package:motor_sport_easy/app/modules/race_admin/controllers/race_admin_controller.dart';
 import 'package:motor_sport_easy/app/routes/app_pages.dart';
 import '../../widgets/custom_elevated_button.dart';
 
@@ -17,6 +18,7 @@ class UpdateRaceDashboardView extends StatefulWidget {
 class _UpdateRaceDashboardViewState extends State<UpdateRaceDashboardView> {
   final raceNameController = TextEditingController();
   final sponsorLogoController = TextEditingController();
+
 
   @override
   void initState() {
@@ -53,6 +55,8 @@ class _UpdateRaceDashboardViewState extends State<UpdateRaceDashboardView> {
       'image_logo': sponsorLogo,
     };
     await RaceApiService.updateRace(raceId, raceData);
+
+
 
   }
 

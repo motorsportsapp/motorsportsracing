@@ -1,8 +1,7 @@
 import 'dart:convert';
-import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import '../../app/api_model/event_api_model.dart';
-import 'package:get/get.dart';
 import '../../app/routes/app_pages.dart';
 import '../contants.dart';
 
@@ -11,7 +10,7 @@ class EventApiService {
 
 
  static Future<List<EventAPIModel>> fetchEvents() async {
-    final response = await http.get(Uri.parse('$baseUrl/events'));
+    final response = await http.get(Uri.parse('$baseUrl/events/'));
     print("events response ll ${response.body}");
     print("events response ll ${response.statusCode}");
 
@@ -27,12 +26,15 @@ class EventApiService {
   static Future<http.Response> createEvent(Map<String,dynamic> data) async {
    try{
      final response = await http.post(
-       Uri.parse('$baseUrl/events'),
+       Uri.parse('$baseUrl/events/'),
        headers: {'Content-Type': 'application/json'},
        body: json.encode(data),
      );
+     print("response create event ${response.body}");
+     print("response create event ${response.statusCode}");
      return response;
    }catch(e){
+     Get.snackbar('Error', 'Event creation failed');
      throw Exception('Failed to create event');
    }
   }

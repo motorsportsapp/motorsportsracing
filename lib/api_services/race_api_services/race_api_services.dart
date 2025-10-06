@@ -97,6 +97,7 @@ class RaceApiService {
       print("race data by id: ${response.body}");
       if(response.statusCode==200){
         await raceAdminController.fetchAllRaces();
+        Get.toNamed(Routes.RACE_ADMIN);
         Get.snackbar("Success", "Race updated successfully");
 
       }else{
