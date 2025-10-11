@@ -1,1 +1,1 @@
-String baseUrl="https://mse.mtscorporate.com";
+String baseUrl="https://mse.motorsporteasy.cloud/";

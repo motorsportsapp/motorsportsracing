@@ -119,8 +119,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
                     ? Icon(Icons.no_accounts)
                     : InkWell(
                         onTap: () {
-                          print("Event ID: $eventId");
-                          print("Race ID: $raceID");
+
 
                           Map<String, dynamic> eventUpdateData = {
                             'event_id': eventId, // Use consistent key name
@@ -132,7 +131,7 @@ class SingleRaceEventDashboardCard extends StatelessWidget {
                             'time': TimeOfDay.now(),
                           };
 
-                          print("Event data for update: $eventUpdateData");
+
                           showRequestDialog(
                             context,
                             eventId,
@@ -196,7 +195,7 @@ Future<void> showRequestDialog(
           CustomElevatedButton(
             level: "Update Event",
             onTap: () {
-              // Ensure all required data is included
+
               final completeEventData = {
                 'event_id': eventId,
                 'race_id': raceID,
@@ -208,8 +207,7 @@ Future<void> showRequestDialog(
                 'time': eventUpdateData['time'],
               };
 
-              print('=== Navigating with Data ===');
-              print('Complete event data: $completeEventData');
+
 
               Get.toNamed(
                 Routes.EDIT_EVENT_DASHBOARD,
